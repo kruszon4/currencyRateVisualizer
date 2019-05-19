@@ -1,7 +1,9 @@
 package com.crv.currencyRateVisualizer;
 
+import com.crv.currencyRateVisualizer.services.CurrencyListService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -9,8 +11,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class CurrencyRateVisualizerApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
+    @Autowired
+    CurrencyListService currencyListService;
+
+    @Test
+    public void contextLoads() {
+
+    }
+
 
 }

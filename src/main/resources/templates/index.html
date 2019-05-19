@@ -1,11 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Currency Rate Visualizer</title>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style.css">
+
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#btnCompare").click(function () {
+
+                $("#realTimeExchangeDiv").load("loader.html");
+
+                var fromCurrency = document.getElementById("inl").value;
+                var toCurrency = document.getElementById("in2").value;
+
+                $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
+            });
+        });
+    </script>
+
 </head>
+
 <body>
-<h3>Nothing there yet</h3>
+
+<div class="container">
+    <header>
+        <nav class="navbar navbar-dark  bg-primary navbar-expand-lg">
+
+            <a class="navbar-brand" href="/"><img src="logo.png" width="30" height="30"
+                                                  class="d-inline-block mr-1 align-bottom" alt="">
+                Currency Rate Visualizer</a>
+        </nav>
+    </header>
+
+
+    <div class="row" id="mainTable">
+        <div class="col">
+            <div class="card mb-4 shadow-sm" id="cardOne">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Select exchange currencies</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <select class="custom-select my-1 mr-sm-2" id="inl">
+                        <option selected>Select currency...</option>
+                        <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
+                                th:id="${currencyCode.code}">CurrencyCode
+                        </option>
+                    </select>
+
+                    <select class="custom-select my-1 mr-sm-2" id="in2">
+                        <option selected>Select currency...</option>
+                        <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
+                                th:id="${currencyCode.code}">CurrencyCode
+                        </option>
+                    </select>
+
+                    <a id="btnCompare" class="btn btn-primary btn-block" href="#" role="button">Comapre</a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card mb-4 shadow-sm" id="cardTwo">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Real-time exchange rate</h4>
+                </div>
+
+                <div class="card-body" id="realTimeExchangeDiv">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <footer style="text-align: center">
+
+        <p><span style="text-decoration:none;color:grey;">Developed by S.Kruszynski</span>
+        </p>
+        <div>Icons made by <a
+                href="https://www.freepik.com/?__hstc=57440181.d4c43aac8839297eb82fced2bc2b46a3.1558120059052.1558120059052.1558120059052.1&__hssc=57440181.4.1558120059054&__hsfp=3373292308"
+                title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
+                                                    title="Flaticon">www.flaticon.com</a> is licensed by <a
+                href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
+                target="_blank">CC
+            3.0 BY</a></div>
+
+    </footer>
+
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 
 </body>
 </html>
+
