@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<body>
+<div>
+
+    <canvas id="myChart" width="1100" height="600"></canvas>
+
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var know = [[${historicalCurrencyDate}]];
+    var unknow = [[${historicalData}]];
+
+    new Chart(document.getElementById("myChart"), {
+        type: 'line',
+        data: {
+            labels: know,
+            datasets: [{
+                data: unknow,
+                label: "USD to EUR",
+                borderColor: "#3e95cd",
+                fill: true
+            }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Currency Rate'
+            }
+        }
+    });
+
+    /*]]>*/
+</script>
+
+
+</body>
+</html>

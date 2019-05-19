@@ -3,6 +3,9 @@ package com.crv.currencyRateVisualizer.services;
 import com.crv.currencyRateVisualizer.model.currencyNames.CurrencyName;
 import com.crv.currencyRateVisualizer.model.realTime.RealTimeValue;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.Data;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -11,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Data
@@ -23,20 +27,20 @@ public class CurrencyListService {
 
 
     @EventListener(ApplicationReadyEvent.class)
-    public List getCurrencyList() {
+    public void getCurrencyList() {
 
-        String currencyListUrl = "https://openexchangerates.org/api/currencies.json";
-        String currencyJsonString = restTemplate.getForObject(currencyListUrl, String.class);
-        String substring = currencyJsonString.substring(1, currencyJsonString.length() - 1);
+        String currencyNameUrl = "https://openexchangerates.org/api/currencies.json";
+        String forObject = restTemplate.getForObject(currencyNameUrl, String.class);
+        JsonElement source = new JsonParser().parse(forObject);
+        JsonObject object = source.getAsJsonObject().getAsJsonObject();
 
-        for (String str : substring.split(",")) {
-            CurrencyName currencyName = new CurrencyName();
-            currencyName.setCode(str.substring(4, 7));
-            currencyName.setName(str.substring(11, str.length() - 1));
-            currencyNameList.add(currencyName);
+        for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+
+            this.currencyNameList.add(CurrencyName.builder()
+                    .code(entry.getKey())
+                    .name(entry.getValue().toString().replace("\"", ""))
+                    .build());
         }
-
-        return this.currencyNameList;
     }
 
     public RealTimeValue getExchangeRate(String fromCurrency, String toCurrency) {
@@ -50,6 +54,5 @@ public class CurrencyListService {
 
         return gson.fromJson(json, RealTimeValue.class);
     }
-
 
 }

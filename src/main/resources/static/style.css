@@ -1,17 +1,20 @@
 #mainTable{
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 
 #cardOne{
-    height: 15rem;
+    height: auto;
 }
 
 #cardTwo{
-    height: 15rem;
+    height: auto;
 }
 #btnCompare{
     margin-top: 15px;
+}
+#myChart{
+    width: auto;
 }
 
 

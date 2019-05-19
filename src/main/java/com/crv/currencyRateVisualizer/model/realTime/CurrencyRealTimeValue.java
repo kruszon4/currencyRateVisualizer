@@ -29,7 +29,4 @@ public class CurrencyRealTimeValue {
     @SerializedName("9. Ask Price")
     private String askPrice;
 
-
-
-
 }

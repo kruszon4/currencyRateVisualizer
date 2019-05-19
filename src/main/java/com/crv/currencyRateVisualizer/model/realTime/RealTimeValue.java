@@ -10,7 +10,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RealTimeValue {
 
-
     @SerializedName("Realtime Currency Exchange Rate")
     private CurrencyRealTimeValue currencyRealTimeValue;
+
 }
