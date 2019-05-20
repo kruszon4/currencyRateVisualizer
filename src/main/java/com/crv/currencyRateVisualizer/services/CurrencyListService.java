@@ -50,6 +50,7 @@ public class CurrencyListService {
                 "&to_currency=" +
                 toCurrency +
                 "&apikey= Q3KX70Q8IC3XP091";
+
         String json = restTemplate.getForObject(stringBuilder, String.class);
 
         return gson.fromJson(json, RealTimeValue.class);

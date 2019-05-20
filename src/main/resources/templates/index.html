@@ -21,14 +21,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 
-
-
     <script>
         $(document).ready(function () {
             $("#btnCompare").click(function () {
 
-                var canvas = $('#myChart')[0]; // or document.getElementById('canvas');
-                canvas.width = canvas.width;
+                document.getElementById("myChart123").innerHTML = '&nbsp;';
+                document.getElementById("myChart123").innerHTML = '<canvas id="myChart"></canvas>';
+
 
                 var fromCurrency = document.getElementById("inl").value;
                 var toCurrency = document.getElementById("in2").value;
@@ -41,13 +40,35 @@
                     $("#myChart").load("loader.html");
                     $("#realTimeExchangeDiv").load("loader.html");
                     $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
-                    $("#myChart").load('/hdata/'+time+'/'+fromCurrency+'/'+toCurrency);
+                    $("#myChart").load('/hdata/' + time + '/' + fromCurrency + '/' + toCurrency);
                 }
 
             });
         });
     </script>
-
+    <script>
+        $(function () {
+            $.ajaxSetup({
+                error: function (jqXHR, exception) {
+                    if (jqXHR.status === 0) {
+                        alert('Not connect.\n Verify Network.');
+                    } else if (jqXHR.status == 404) {
+                        alert('Requested page not found. [404]');
+                    } else if (jqXHR.status == 500) {
+                        $("#realTimeExchangeDiv").load("alert.html");
+                    } else if (exception === 'parsererror') {
+                        alert('Requested JSON parse failed.');
+                    } else if (exception === 'timeout') {
+                        alert('Time out error.');
+                    } else if (exception === 'abort') {
+                        alert('Ajax request aborted.');
+                    } else {
+                        alert('Uncaught Error.\n' + jqXHR.responseText);
+                    }
+                }
+            });
+        });
+    </script>
 
 
 </head>
@@ -107,16 +128,16 @@
         </div>
 
     </div>
-<div>
-    <a id="btnMonthly" class="btn btn-primary btn-block" href="#" role="button">Monthly</a>
-    <a id="btnDaily" class="btn btn-primary btn-block" href="#" role="button">Daily</a>
-</div>
+    <!--<div>-->
+        <!--<a id="btnMonthly" class="btn btn-primary btn-block" href="#" role="button">Monthly</a>-->
+        <!--<a id="btnDaily" class="btn btn-primary btn-block" href="#" role="button">Daily</a>-->
+    <!--</div>-->
 
     <div class="row">
         <div class="col">
 
             <div id="myChart123">
-                <canvas id="myChart" width="1100" height="600"></canvas>
+
             </div>
         </div>
     </div>
@@ -166,7 +187,6 @@
 
     /*]]>*/
 </script>
-
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

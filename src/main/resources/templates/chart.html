@@ -12,7 +12,7 @@
 <body>
 <div>
 
-    <canvas id="myChart" width="1100" height="600"></canvas>
+
 
 </div>
 
@@ -20,6 +20,10 @@
     /*<![CDATA[*/
     var know = [[${historicalCurrencyDate}]];
     var unknow = [[${historicalData}]];
+
+    if(know == null){
+        $("#myChart123").load("alertNoDb.html")
+    }
 
     new Chart(document.getElementById("myChart"), {
         type: 'line',

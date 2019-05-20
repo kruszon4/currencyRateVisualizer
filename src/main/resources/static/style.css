@@ -16,5 +16,8 @@
 #myChart{
     width: auto;
 }
+#alertEmptyDB{
+    margin-top: 15px;
+}
 
 

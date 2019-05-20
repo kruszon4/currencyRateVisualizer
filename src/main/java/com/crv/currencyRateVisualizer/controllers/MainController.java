@@ -42,8 +42,16 @@ public class MainController {
     private String getExchangeRate(@PathVariable(value = "from") String fromCurrency,
                                    @PathVariable(value = "to") String toCurrency, Model model) {
 
-        RealTimeValue exchangeRate = currencyListService.getExchangeRate(fromCurrency, toCurrency);
-        model.addAttribute("exchangeRate", exchangeRate);
+        try {
+
+            RealTimeValue exchangeRate = currencyListService.getExchangeRate(fromCurrency, toCurrency);
+            model.addAttribute("exchangeRate", exchangeRate);
+
+
+        } catch (Exception e) {
+            System.out.println("Too many request");
+        }
+
 
         return "realTimeRate";
     }
@@ -52,16 +60,20 @@ public class MainController {
     private String getHistoricalData(@PathVariable(value = "time") String time,
                                      @PathVariable(value = "from") String from,
                                      @PathVariable(value = "to") String to, Model model) {
+        try {
+            List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
+            List<String> currencyRateDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
+            List<String> currencyRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
+            model.addAttribute("historicalCurrencyDate", currencyRateDate);
+            model.addAttribute("historicalData", currencyRate);
+            model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
 
-        List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
-        List<String> currencyRateDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
-        List<String> currencyRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
-        model.addAttribute("historicalCurrencyDate", currencyRateDate);
-        model.addAttribute("historicalData", currencyRate);
-        model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
+        } catch (NullPointerException e) {
+            System.out.println("Too many request");
+            model.addAttribute("error", 1);
+        }
 
         return "chart";
     }
-
 
 }
