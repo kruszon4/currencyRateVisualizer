@@ -1,6 +1,7 @@
 package com.crv.currencyRateVisualizer.services;
 
 import com.crv.currencyRateVisualizer.model.currencyNames.CurrencyName;
+import com.crv.currencyRateVisualizer.model.realTime.CurrencyRealTimeValue;
 import com.crv.currencyRateVisualizer.model.realTime.RealTimeValue;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -24,6 +25,7 @@ public class CurrencyListService {
     private RestTemplate restTemplate = new RestTemplate();
     private Gson gson = new Gson();
     private List<CurrencyName> currencyNameList = new ArrayList<>();
+    private RealTimeValue realTimeDefaultValue;
 
 
     @EventListener(ApplicationReadyEvent.class)
@@ -43,13 +45,20 @@ public class CurrencyListService {
         }
     }
 
+    @EventListener(ApplicationReadyEvent.class)
+    public void getDefaultCurrencyExchangeRateData() {
+        this.realTimeDefaultValue = getExchangeRate("USD", "EUR");
+    }
+
+
+
     public RealTimeValue getExchangeRate(String fromCurrency, String toCurrency) {
 
         String stringBuilder = "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=" +
                 fromCurrency +
                 "&to_currency=" +
                 toCurrency +
-                "&apikey= Q3KX70Q8IC3XP091";
+                "&apikey=LBYUC6QOGGLODMNM";
 
         String json = restTemplate.getForObject(stringBuilder, String.class);
 

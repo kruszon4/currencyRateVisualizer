@@ -8,11 +8,18 @@
     <title>Document</title>
 </head>
 <body>
-<div>
-    <h3 th:text="${exchangeRate.getCurrencyRealTimeValue().getCurrencyCode()}"></h3>
-    <h3>TO</h3>
-    <h3 th:text="${exchangeRate.getCurrencyRealTimeValue().getToCurrencyCode()}"></h3>
-    <h3 th:text="${exchangeRate.getCurrencyRealTimeValue().getExchangeRate()}"></h3>
+<div id="exchangeRateCard">
+    <b th:text="${exchangeRate.getCurrencyRealTimeValue().getFromCurrencyName()}"></b>
+    <b> / </b>
+    <b th:text="${exchangeRate.getCurrencyRealTimeValue().getToCurrencyName()}"></b>
+    <p>
+        <b> 1 </b>
+        <b th:text="${exchangeRate.getCurrencyRealTimeValue().getFromCurrencyCode()}"></b>
+        <b> COST</b>
+        <b th:text="${exchangeRate.getCurrencyRealTimeValue().getExchangeRate().substring(0,6)}"></b>
+
+        <b th:text="${exchangeRate.getCurrencyRealTimeValue().getToCurrencyCode()}"></b>
+    </p>
 </div>
 
 </body>

@@ -6,13 +6,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.Data;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Data
 @Service
@@ -20,11 +19,20 @@ public class HistoricalDataService {
 
     private RestTemplate restTemplate = new RestTemplate();
     private Gson gson = new Gson();
+    private List<HistoricalDataPOJO> historicalDefaultData = new ArrayList<>();
 
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void getDefaultCurrencyHistoricalData() {
+
+        List<HistoricalDataPOJO> historicalDataList = getHistoricalDataList("Monthly", "USD", "EUR");
+        Collections.reverse(historicalDataList);
+        this.historicalDefaultData.addAll(historicalDataList);
+        System.out.println("Data loaded");
+    }
 
     public List<HistoricalDataPOJO> getHistoricalDataList(String time, String from, String to) {
 
-        Map<String, HistoricalDataPOJO> historicalDataMap = new TreeMap<>();
         List<HistoricalDataPOJO> historicalDataList = new ArrayList<>();
         String historicalDataUrl = "https://www.alphavantage.co/query?function=FX_" +
                 time + "&from_symbol=" +
@@ -40,11 +48,10 @@ public class HistoricalDataService {
 
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
             HistoricalDataPOJO historicalDataObject = gson.fromJson(entry.getValue(), HistoricalDataPOJO.class);
-
             historicalDataObject.setCreateDate(entry.getKey());
+
             historicalDataList.add(historicalDataObject);
         }
-
         return historicalDataList;
     }
 }

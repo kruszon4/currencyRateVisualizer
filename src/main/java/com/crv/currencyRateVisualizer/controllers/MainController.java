@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +27,13 @@ public class MainController {
     @GetMapping("/")
     private String getCurrencyApp(Model model) {
 
-        List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList("Weekly", "USD", "PLN");
-        List<String> currencyRateDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
-        List<String> currencyRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
-        model.addAttribute("historicalCurrencyDate", currencyRateDate);
-        model.addAttribute("historicalData", currencyRate);
+        List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDefaultData();
+        List<String> historicalDefaultDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
+        List<String> historicalDefaultRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
+
+        model.addAttribute("defaultExchangeRate", currencyListService.getRealTimeDefaultValue());
+        model.addAttribute("historicalDefaultDate",historicalDefaultDate);
+        model.addAttribute("historicalDefaultRate", historicalDefaultRate);
 
 
         model.addAttribute("currencyList", currencyListService.getCurrencyNameList());

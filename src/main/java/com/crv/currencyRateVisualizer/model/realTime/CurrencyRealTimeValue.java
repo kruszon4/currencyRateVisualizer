@@ -11,7 +11,7 @@ import lombok.Data;
 public class CurrencyRealTimeValue {
 
     @SerializedName("1. From_Currency Code")
-    private String currencyCode;
+    private String fromCurrencyCode;
     @SerializedName("2. From_Currency Name")
     private String fromCurrencyName;
     @SerializedName("3. To_Currency Code")

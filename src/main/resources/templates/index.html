@@ -96,14 +96,14 @@
                 <div class="card-body">
 
                     <select class="custom-select my-1 mr-sm-2" id="inl">
-                        <!--<option selected>Select currency...</option>-->
+                        <!--<option selected>USD</option>-->
                         <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
                                 th:id="${currencyCode.code}">CurrencyCode
                         </option>
                     </select>
 
                     <select class="custom-select my-1 mr-sm-2" id="in2">
-                        <!--<option selected>Select currency...</option>-->
+                        <!--<option selected>EUR</option>-->
                         <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
                                 th:id="${currencyCode.code}">CurrencyCode
                         </option>
@@ -122,22 +122,34 @@
                 </div>
 
                 <div class="card-body" id="realTimeExchangeDiv">
+                    <div id="exchangeRateCard">
+                        <b th:text="${defaultExchangeRate.getCurrencyRealTimeValue().getFromCurrencyName()}"></b>
+                        <b> / </b>
+                        <b th:text="${defaultExchangeRate.getCurrencyRealTimeValue().getToCurrencyName()}"></b>
+                        <p>
+                            <b> 1 </b>
+                            <b th:text="${defaultExchangeRate.getCurrencyRealTimeValue().getFromCurrencyCode()}"></b>
+                            <b> COST</b>
+                            <b th:text="${defaultExchangeRate.getCurrencyRealTimeValue().getExchangeRate().substring(0,6)}"></b>
 
+                            <b th:text="${defaultExchangeRate.getCurrencyRealTimeValue().getToCurrencyCode()}"></b>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
     <!--<div>-->
-        <!--<a id="btnMonthly" class="btn btn-primary btn-block" href="#" role="button">Monthly</a>-->
-        <!--<a id="btnDaily" class="btn btn-primary btn-block" href="#" role="button">Daily</a>-->
+    <!--<a id="btnMonthly" class="btn btn-primary btn-block" href="#" role="button">Monthly</a>-->
+    <!--<a id="btnDaily" class="btn btn-primary btn-block" href="#" role="button">Daily</a>-->
     <!--</div>-->
 
     <div class="row">
         <div class="col">
 
             <div id="myChart123">
-
+                <canvas id="myChart"></canvas>
             </div>
         </div>
     </div>
@@ -162,15 +174,15 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var know = [[${historicalCurrencyDate}]];
-    var unknow = [[${historicalData}]];
+    var historicalDefaultDate = [[${historicalDefaultDate}]];
+    var historicalDefaultRate = [[${historicalDefaultRate}]];
 
     new Chart(document.getElementById("myChart"), {
         type: 'line',
         data: {
-            labels: know,
+            labels: historicalDefaultDate,
             datasets: [{
-                data: unknow,
+                data: historicalDefaultRate,
                 label: "USD to EUR",
                 borderColor: "#3e95cd",
                 fill: true
