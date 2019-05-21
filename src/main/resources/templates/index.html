@@ -70,6 +70,24 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $(".btn-primary").click(function () {
+
+                var timeButton = $(this).attr("value");
+                var fromCurrency = document.getElementById("inl").value;
+                var toCurrency = document.getElementById("in2").value;
+
+                document.getElementById("myChart123").innerHTML = '&nbsp;';
+                document.getElementById("myChart123").innerHTML = '<canvas id="myChart"></canvas>';
+
+                $("#myChart").load('/hdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
+
+
+            });
+        });
+    </script>
+
 
 </head>
 
@@ -96,20 +114,20 @@
                 <div class="card-body">
 
                     <select class="custom-select my-1 mr-sm-2" id="inl">
-                        <!--<option selected>USD</option>-->
+                        <option selected>USD</option>
                         <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
                                 th:id="${currencyCode.code}">CurrencyCode
                         </option>
                     </select>
 
                     <select class="custom-select my-1 mr-sm-2" id="in2">
-                        <!--<option selected>EUR</option>-->
+                        <option selected>EUR</option>
                         <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
                                 th:id="${currencyCode.code}">CurrencyCode
                         </option>
                     </select>
 
-                    <a id="btnCompare" class="btn btn-primary btn-block" href="#" role="button">Comapre</a>
+                    <a id="btnCompare" class="btn btn-info btn-block" href="#" role="button">Comapre</a>
 
                 </div>
             </div>
@@ -140,18 +158,27 @@
         </div>
 
     </div>
-    <!--<div>-->
-    <!--<a id="btnMonthly" class="btn btn-primary btn-block" href="#" role="button">Monthly</a>-->
-    <!--<a id="btnDaily" class="btn btn-primary btn-block" href="#" role="button">Daily</a>-->
-    <!--</div>-->
+
 
     <div class="row">
-        <div class="col">
+        <div class="col-md-10">
 
             <div id="myChart123">
                 <canvas id="myChart"></canvas>
             </div>
         </div>
+
+        <div class="col-md-1">
+            <a id="btnMonthly" class="btn btn-primary btn-sm" href="#" role="button" th:value="Monthly">Monthly</a>
+            <a id="btnWeekly" class="btn btn-primary btn-sm" href="#" role="button" th:value="Weekly">Weekly</a>
+            <a id="btnDaily" class="btn btn-primary btn-sm" href="#" role="button" th:value="Daily">Daily</a>
+            <a id="btn5min" class="btn btn-primary btn-sm" href="#" role="button" th:value="5min">5&nbspmin</a>
+            <a id="btn15min" class="btn btn-primary btn-sm" href="#" role="button" th:value="15min">15&nbspmin</a>
+            <a id="btn30min" class="btn btn-primary btn-sm" href="#" role="button" th:value="30min">30&nbspmin</a>
+
+        </div>
+
+
     </div>
 
 

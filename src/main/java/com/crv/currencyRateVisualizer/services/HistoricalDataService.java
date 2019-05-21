@@ -34,14 +34,9 @@ public class HistoricalDataService {
     public List<HistoricalDataPOJO> getHistoricalDataList(String time, String from, String to) {
 
         List<HistoricalDataPOJO> historicalDataList = new ArrayList<>();
-        String historicalDataUrl = "https://www.alphavantage.co/query?function=FX_" +
-                time + "&from_symbol=" +
-                from +
-                "&to_symbol=" +
-                to +
-                "&apikey=GEGLEP3CDWNQQ4KE";
 
-        String forObject = restTemplate.getForObject(historicalDataUrl, String.class);
+        String url = urlCreator(time, from, to);
+        String forObject = restTemplate.getForObject(url, String.class);
         JsonElement root = new JsonParser().parse(forObject);
 
         JsonObject object = root.getAsJsonObject().get("Time Series FX (" + time + ")").getAsJsonObject();
@@ -54,4 +49,24 @@ public class HistoricalDataService {
         }
         return historicalDataList;
     }
+
+
+    public String urlCreator(String time, String from, String to) {
+
+        String main = "https://www.alphavantage.co/query?function=FX_";
+        String fromString = "&from_symbol=";
+        String toString = "&to_symbol=";
+        String key = "&apikey=GEGLEP3CDWNQQ4KE";
+        String intraday = "INTRADAY";
+        String interval = "&interval=";
+
+        if (time.equals("Monthly") || time.equals("Daily") || time.equals("Weekly")) {
+
+            return main + time + fromString + from + toString + to + key;
+        }
+
+        return main + intraday + fromString + from + toString + to + interval + time + key;
+
+    }
+
 }

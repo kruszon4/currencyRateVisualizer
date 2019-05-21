@@ -12,26 +12,29 @@
 <body>
 <div>
 
-
+    <canvas id="myChart"></canvas>
 
 </div>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var know = [[${historicalCurrencyDate}]];
-    var unknow = [[${historicalData}]];
+    var historicalDateList = [[${historicalCurrencyDate}]];
+    var historicalRateList = [[${historicalData}]];
 
-    if(know == null){
+    var fromCurrency = document.getElementById("inl").value;
+    var toCurrency = document.getElementById("in2").value;
+
+    if (historicalDateList == null) {
         $("#myChart123").load("alertNoDb.html")
     }
 
     new Chart(document.getElementById("myChart"), {
         type: 'line',
         data: {
-            labels: know,
+            labels: historicalDateList,
             datasets: [{
-                data: unknow,
-                label: "USD to EUR",
+                data: historicalRateList,
+                label: fromCurrency + ' to ' + toCurrency  ,
                 borderColor: "#3e95cd",
                 fill: true
             }
