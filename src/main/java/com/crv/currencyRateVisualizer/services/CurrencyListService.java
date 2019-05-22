@@ -1,7 +1,6 @@
 package com.crv.currencyRateVisualizer.services;
 
 import com.crv.currencyRateVisualizer.model.currencyNames.CurrencyName;
-import com.crv.currencyRateVisualizer.model.realTime.CurrencyRealTimeValue;
 import com.crv.currencyRateVisualizer.model.realTime.RealTimeValue;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -10,7 +9,9 @@ import com.google.gson.JsonParser;
 import lombok.Data;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -45,11 +46,14 @@ public class CurrencyListService {
         }
     }
 
+    @Transactional
+    @Scheduled(cron = "0 0 * ? * *")
     @EventListener(ApplicationReadyEvent.class)
-    public void getDefaultCurrencyExchangeRateData() {
+    public void setDefaultCurrencyExchangeRateData() {
+        this.realTimeDefaultValue = null;
         this.realTimeDefaultValue = getExchangeRate("USD", "EUR");
+        System.out.println("Data set");
     }
-
 
 
     public RealTimeValue getExchangeRate(String fromCurrency, String toCurrency) {

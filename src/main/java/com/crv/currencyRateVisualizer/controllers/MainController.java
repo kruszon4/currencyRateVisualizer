@@ -32,7 +32,7 @@ public class MainController {
         List<String> historicalDefaultRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
 
         model.addAttribute("defaultExchangeRate", currencyListService.getRealTimeDefaultValue());
-        model.addAttribute("historicalDefaultDate",historicalDefaultDate);
+        model.addAttribute("historicalDefaultDate", historicalDefaultDate);
         model.addAttribute("historicalDefaultRate", historicalDefaultRate);
 
 
@@ -67,6 +67,7 @@ public class MainController {
             List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
             List<String> currencyRateDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
             List<String> currencyRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
+
             model.addAttribute("historicalCurrencyDate", currencyRateDate);
             model.addAttribute("historicalData", currencyRate);
             model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
@@ -78,5 +79,7 @@ public class MainController {
 
         return "chart";
     }
+
+
 
 }
