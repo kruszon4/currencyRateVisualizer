@@ -25,12 +25,12 @@ public class HistoricalDataService {
 
 
     @Transactional
-    @Scheduled(cron = "0 0 * ? * *")
+    @Scheduled(cron = "0 20 3 * * ?")
     @EventListener(ApplicationReadyEvent.class)
     public void setDefaultCurrencyHistoricalData() {
         this.historicalDefaultData.clear();
         List<HistoricalDataPOJO> historicalDataList = getHistoricalDataList("Monthly", "USD", "EUR");
-        Collections.reverse(historicalDataList);
+
         this.historicalDefaultData.addAll(historicalDataList);
         System.out.println("Data loaded");
     }
@@ -51,6 +51,7 @@ public class HistoricalDataService {
 
             historicalDataList.add(historicalDataObject);
         }
+        Collections.reverse(historicalDataList);
         return historicalDataList;
     }
 
