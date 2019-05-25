@@ -10,9 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -27,15 +25,10 @@ public class MainController {
     @GetMapping("/")
     private String getCurrencyApp(Model model) {
 
-        List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDefaultData();
-        List<String> historicalDefaultDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
-        List<String> historicalDefaultRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
+        List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
 
         model.addAttribute("defaultExchangeRate", currencyListService.getRealTimeDefaultValue());
-        model.addAttribute("historicalDefaultDate", historicalDefaultDate);
-        model.addAttribute("historicalDefaultRate", historicalDefaultRate);
-
-
+        model.addAttribute("defaultHistoricalData", historicalDataService.jsDataGenerator(hdd));
         model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
 
         return "index";
@@ -45,41 +38,33 @@ public class MainController {
     private String getExchangeRate(@PathVariable(value = "from") String fromCurrency,
                                    @PathVariable(value = "to") String toCurrency, Model model) {
 
-        try {
+
 
             RealTimeValue exchangeRate = currencyListService.getExchangeRate(fromCurrency, toCurrency);
             model.addAttribute("exchangeRate", exchangeRate);
 
-
-        } catch (Exception e) {
-            System.out.println("Too many request");
-        }
-
-
         return "realTimeRate";
     }
 
-    @GetMapping("/hdata/{time}/{from}/{to}")
-    private String getHistoricalData(@PathVariable(value = "time") String time,
-                                     @PathVariable(value = "from") String from,
-                                     @PathVariable(value = "to") String to, Model model) {
+    @GetMapping("/cdata/{time}/{from}/{to}")
+    private String getHhd(@PathVariable(value = "time") String time,
+                          @PathVariable(value = "from") String from,
+                          @PathVariable(value = "to") String to, Model model) {
         try {
             List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
-            List<String> currencyRateDate = historicalDataList.stream().map(HistoricalDataPOJO::getCreateDate).collect(Collectors.toList());
-            List<String> currencyRate = historicalDataList.stream().map(HistoricalDataPOJO::getClose).collect(Collectors.toList());
+            model.addAttribute("historicalData", historicalDataService.jsDataGenerator(historicalDataList));
+            model.addAttribute("error", 0);
 
-            model.addAttribute("historicalCurrencyDate", currencyRateDate);
-            model.addAttribute("historicalData", currencyRate);
-            model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
 
         } catch (NullPointerException e) {
             System.out.println("Too many request");
             model.addAttribute("error", 1);
+            List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
+            model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
         }
 
-        return "chart";
+        return "amchart";
     }
-
 
 
 }

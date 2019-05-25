@@ -13,6 +13,19 @@
     <link rel="stylesheet" href="../style.css">
 
 
+    <title>Line Chart</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+
+
     <script
             src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -26,26 +39,24 @@
             $("#btnCompare").click(function () {
 
                 document.getElementById("myChart123").innerHTML = '&nbsp;';
-                document.getElementById("myChart123").innerHTML = '<canvas id="myChart"></canvas>';
+                document.getElementById("myChart123").innerHTML = '<canvas id="canvas"></canvas>';
 
 
                 var fromCurrency = document.getElementById("inl").value;
                 var toCurrency = document.getElementById("in2").value;
                 var time = 'Monthly';
 
-                if (fromCurrency === 'Select currency...' ||
-                    toCurrency === 'Select currency...') {
-                    alert("Choose currencies");
-                } else {
-                    $("#myChart").load("loader.html");
-                    $("#realTimeExchangeDiv").load("loader.html");
-                    $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
-                    $("#myChart").load('/hdata/' + time + '/' + fromCurrency + '/' + toCurrency);
-                }
+                $("#realTimeExchangeDiv").load("loader.html");
+                $("#canvas").load('/cdata/' + time + '/' + fromCurrency + '/' + toCurrency);
+                $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
+
+
+
 
             });
         });
     </script>
+
     <script>
         $(function () {
             $.ajaxSetup({
@@ -79,10 +90,9 @@
                 var toCurrency = document.getElementById("in2").value;
 
                 document.getElementById("myChart123").innerHTML = '&nbsp;';
-                document.getElementById("myChart123").innerHTML = '<canvas id="myChart"></canvas>';
+                document.getElementById("myChart123").innerHTML = '<canvas id="canvas"></canvas>';
 
-                $("#myChart").load('/hdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
-
+                $("#canvas").load('/cdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
 
             });
         });
@@ -164,7 +174,9 @@
         <div class="col-md-10">
 
             <div id="myChart123">
-                <canvas id="myChart"></canvas>
+
+                <canvas id="canvas"></canvas>
+
             </div>
         </div>
 
@@ -175,7 +187,6 @@
             <a id="btn5min" class="btn btn-primary btn-sm" href="#" role="button" th:value="5min">5&nbspmin</a>
             <a id="btn15min" class="btn btn-primary btn-sm" href="#" role="button" th:value="15min">15&nbspmin</a>
             <a id="btn30min" class="btn btn-primary btn-sm" href="#" role="button" th:value="30min">30&nbspmin</a>
-
         </div>
 
 
@@ -199,27 +210,49 @@
 
 </div>
 
+
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var historicalDefaultDate = [[${historicalDefaultDate}]];
-    var historicalDefaultRate = [[${historicalDefaultRate}]];
 
-    new Chart(document.getElementById("myChart"), {
+    var defaultData = [(${defaultHistoricalData})];
+
+    var timeFormat = 'YYYY-MM-DD h:mm:ss';
+
+
+    new Chart(document.getElementById("canvas"), {
         type: 'line',
         data: {
-            labels: historicalDefaultDate,
             datasets: [{
-                data: historicalDefaultRate,
+                data: defaultData,
+                fill: true,
                 label: "USD to EUR",
-                borderColor: "#3e95cd",
-                fill: true
-            }
-            ]
+                borderColor: "#3e95cd"
+            }]
         },
         options: {
+            responsive: true,
             title: {
                 display: true,
-                text: 'Currency Rate'
+                text: "Chart.js Time Scale"
+            },
+            scales: {
+                xAxes: [{
+                    type: "time",
+                    time: {
+                        parser: timeFormat,
+                        tooltipFormat: 'll'
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'value'
+                    }
+                }]
             }
         }
     });

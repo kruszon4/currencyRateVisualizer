@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Line Chart</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+</head>
+
+<body>
+
+<div id="myChart123" style="width:75%;">
+    <canvas id="canvas"></canvas>
+</div>
+<script>
+
+    var error = [(${error})];
+    if (error > 0) {
+
+        window.alert("Too Many Requests - wait 1 min");
+        window.location.reload(true);
+
+    } else {
+        var abc = [(${historicalData})];
+        var timeFormat = 'YYYY-MM-DD h:mm:ss';
+        var fromCurrency = document.getElementById("inl").value;
+        var toCurrency = document.getElementById("in2").value;
+
+
+        new Chart(document.getElementById("canvas"), {
+            type: 'line',
+            data: {
+                datasets: [{
+                    data: abc,
+                    fill: true,
+                    label: fromCurrency + " TO " + toCurrency,
+                    borderColor: "#3e95cd"
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: "Chart.js Time Scale"
+                },
+                scales: {
+                    xAxes: [{
+                        type: "time",
+                        time: {
+                            parser: timeFormat,
+                            tooltipFormat: 'll'
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'value'
+                        }
+                    }]
+                }
+            }
+        })
+    }
+
+
+</script>
+
+</body>
+
+</html>

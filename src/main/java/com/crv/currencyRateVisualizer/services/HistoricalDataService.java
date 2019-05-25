@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @Service
@@ -73,5 +74,22 @@ public class HistoricalDataService {
         return main + intraday + fromString + from + toString + to + interval + time + key;
 
     }
+
+    public List<String> jsDataGenerator(List<HistoricalDataPOJO> source) {
+
+        return source.stream().map(this::maper).collect(Collectors.toList());
+
+    }
+
+    private String maper(HistoricalDataPOJO source) {
+
+        JsonObject object = new JsonObject();
+        object.addProperty("x", source.getCreateDate());
+        object.addProperty("y", source.getClose());
+        return object.toString();
+
+    }
+
+
 
 }
