@@ -53,6 +53,7 @@ public class HistoricalDataService {
             historicalDataList.add(historicalDataObject);
         }
         Collections.reverse(historicalDataList);
+
         return historicalDataList;
     }
 
@@ -77,19 +78,72 @@ public class HistoricalDataService {
 
     public List<String> jsDataGenerator(List<HistoricalDataPOJO> source) {
 
-        return source.stream().map(this::maper).collect(Collectors.toList());
+        return source.stream().map(this::mapper).collect(Collectors.toList());
 
     }
 
-    private String maper(HistoricalDataPOJO source) {
+    public String mapper(HistoricalDataPOJO source) {
 
         JsonObject object = new JsonObject();
         object.addProperty("x", source.getCreateDate());
         object.addProperty("y", source.getClose());
         return object.toString();
-
     }
 
+    public List<List> trendCalculator(List<HistoricalDataPOJO> source) {
 
+        List<List> trendList = new ArrayList<>();
+        List<HistoricalDataPOJO> maxList = new ArrayList<>();
+        List<HistoricalDataPOJO> minList = new ArrayList<>();
+
+        int listSize = source.size() / 5;
+        int indexOf = 0;
+
+        List<HistoricalDataPOJO> tmpList = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < listSize; j++) {
+                tmpList.add(source.get(indexOf + j));
+            }
+
+            Comparator<HistoricalDataPOJO> compareByCompare = Comparator.comparing(HistoricalDataPOJO::getClose);
+            tmpList.sort(compareByCompare);
+            Collections.reverse(tmpList);
+
+            maxList.add(tmpList.get(0));
+            minList.add(tmpList.get(listSize - 1));
+
+            tmpList.clear();
+            indexOf += listSize;
+        }
+
+
+        for (int i = 0; i < maxList.size()-1; i++) {
+
+            double max = Double.parseDouble(maxList.get(i).getClose());
+            double max2 = Double.parseDouble(maxList.get(i + 1).getClose());
+
+            double min = Double.parseDouble(minList.get(i).getClose());
+            double min2 = Double.parseDouble(minList.get(i + 1).getClose());
+
+            if (max2 < max) {
+                List<HistoricalDataPOJO> tmp = new ArrayList<>();
+                tmp.add(maxList.get(i));
+                tmp.add(maxList.get(i + 1));
+
+                trendList.add(tmp);
+            }
+
+            if (min2 > min) {
+
+                List<HistoricalDataPOJO> tmp = new ArrayList<>();
+                tmp.add(minList.get(i));
+                tmp.add(minList.get(i + 1));
+
+                trendList.add(tmp);
+            }
+        }
+        return trendList;
+    }
 
 }

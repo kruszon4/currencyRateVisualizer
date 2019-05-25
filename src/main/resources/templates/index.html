@@ -38,8 +38,8 @@
         $(document).ready(function () {
             $("#btnCompare").click(function () {
 
-                document.getElementById("myChart123").innerHTML = '&nbsp;';
-                document.getElementById("myChart123").innerHTML = '<canvas id="canvas"></canvas>';
+                document.getElementById("myChart").innerHTML = '&nbsp;';
+                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
 
                 var fromCurrency = document.getElementById("inl").value;
@@ -49,8 +49,6 @@
                 $("#realTimeExchangeDiv").load("loader.html");
                 $("#canvas").load('/cdata/' + time + '/' + fromCurrency + '/' + toCurrency);
                 $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
-
-
 
 
             });
@@ -89,8 +87,8 @@
                 var fromCurrency = document.getElementById("inl").value;
                 var toCurrency = document.getElementById("in2").value;
 
-                document.getElementById("myChart123").innerHTML = '&nbsp;';
-                document.getElementById("myChart123").innerHTML = '<canvas id="canvas"></canvas>';
+                document.getElementById("myChart").innerHTML = '&nbsp;';
+                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
                 $("#canvas").load('/cdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
 
@@ -137,7 +135,7 @@
                         </option>
                     </select>
 
-                    <a id="btnCompare" class="btn btn-info btn-block" href="#" role="button">Comapre</a>
+                    <a id="btnCompare" class="btn btn-info btn-block" href="#" role="button">Compare</a>
 
                 </div>
             </div>
@@ -173,7 +171,7 @@
     <div class="row">
         <div class="col-md-10">
 
-            <div id="myChart123">
+            <div id="myChart">
 
                 <canvas id="canvas"></canvas>
 
@@ -184,9 +182,9 @@
             <a id="btnMonthly" class="btn btn-primary btn-sm" href="#" role="button" th:value="Monthly">Monthly</a>
             <a id="btnWeekly" class="btn btn-primary btn-sm" href="#" role="button" th:value="Weekly">Weekly</a>
             <a id="btnDaily" class="btn btn-primary btn-sm" href="#" role="button" th:value="Daily">Daily</a>
-            <a id="btn5min" class="btn btn-primary btn-sm" href="#" role="button" th:value="5min">5&nbspmin</a>
-            <a id="btn15min" class="btn btn-primary btn-sm" href="#" role="button" th:value="15min">15&nbspmin</a>
             <a id="btn30min" class="btn btn-primary btn-sm" href="#" role="button" th:value="30min">30&nbspmin</a>
+            <a id="btn15min" class="btn btn-primary btn-sm" href="#" role="button" th:value="15min">15&nbspmin</a>
+            <a id="btn5min" class="btn btn-primary btn-sm" href="#" role="button" th:value="5min">5&nbspmin</a>
         </div>
 
 
@@ -197,13 +195,15 @@
 
         <p><span style="text-decoration:none;color:grey;">Developed by S.Kruszynski</span>
         </p>
-        <div>Icons made by <a
+        <p><span style="text-decoration:none;color:grey;">Icons made by <a
                 href="https://www.freepik.com/?__hstc=57440181.d4c43aac8839297eb82fced2bc2b46a3.1558120059052.1558120059052.1558120059052.1&__hssc=57440181.4.1558120059054&__hsfp=3373292308"
                 title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
                                                     title="Flaticon">www.flaticon.com</a> is licensed by <a
                 href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0"
                 target="_blank">CC
-            3.0 BY</a></div>
+            3.0 BY</a></span>
+        </p>
+
 
     </footer>
 
@@ -216,6 +216,11 @@
 
     var defaultData = [(${defaultHistoricalData})];
 
+    var m0 = [(${m0})];
+    var m1 = [(${m1})];
+    var m2 = [(${m2})];
+    var m3 = [(${m3})];
+
     var timeFormat = 'YYYY-MM-DD h:mm:ss';
 
 
@@ -227,13 +232,39 @@
                 fill: true,
                 label: "USD to EUR",
                 borderColor: "#3e95cd"
-            }]
+            },
+                {
+                    data: m0,
+                    fill: false,
+
+                    borderColor: "red"
+                },
+                {
+                    data: m1,
+                    fill: false,
+
+                    borderColor: "green"
+                },
+                {
+                    data: m2,
+                    fill: false,
+                    borderColor: "green"
+                },
+                {
+                    data: m3,
+                    fill: false,
+                    borderColor: "green"
+                }
+            ]
         },
         options: {
             responsive: true,
             title: {
                 display: true,
-                text: "Chart.js Time Scale"
+                text: "Currency Exchange Rates"
+            },
+            legend: {
+                display: false,
             },
             scales: {
                 xAxes: [{
@@ -250,7 +281,7 @@
                 yAxes: [{
                     scaleLabel: {
                         display: true,
-                        labelString: 'value'
+                        labelString: 'USD/EUR Rates'
                     }
                 }]
             }

@@ -26,6 +26,16 @@ public class MainController {
     private String getCurrencyApp(Model model) {
 
         List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
+        List<List> lists = historicalDataService.trendCalculator(hdd);
+        List m0 = lists.get(0);
+        List m1 = lists.get(1);
+        List m2 = lists.get(2);
+        List m3 = lists.get(3);
+
+        model.addAttribute("m0", historicalDataService.jsDataGenerator(m0));
+        model.addAttribute("m1", historicalDataService.jsDataGenerator(m1));
+        model.addAttribute("m2", historicalDataService.jsDataGenerator(m2));
+        model.addAttribute("m3", historicalDataService.jsDataGenerator(m3));
 
         model.addAttribute("defaultExchangeRate", currencyListService.getRealTimeDefaultValue());
         model.addAttribute("defaultHistoricalData", historicalDataService.jsDataGenerator(hdd));
@@ -39,9 +49,8 @@ public class MainController {
                                    @PathVariable(value = "to") String toCurrency, Model model) {
 
 
-
-            RealTimeValue exchangeRate = currencyListService.getExchangeRate(fromCurrency, toCurrency);
-            model.addAttribute("exchangeRate", exchangeRate);
+        RealTimeValue exchangeRate = currencyListService.getExchangeRate(fromCurrency, toCurrency);
+        model.addAttribute("exchangeRate", exchangeRate);
 
         return "realTimeRate";
     }
@@ -63,7 +72,7 @@ public class MainController {
             model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
         }
 
-        return "amchart";
+        return "chart";
     }
 
 

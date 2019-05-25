@@ -24,7 +24,7 @@
 
 <body>
 
-<div id="myChart123" style="width:75%;">
+<div id="myChart" style="width:75%;">
     <canvas id="canvas"></canvas>
 </div>
 <script>
@@ -36,7 +36,7 @@
         window.location.reload(true);
 
     } else {
-        var abc = [(${historicalData})];
+        var historicalData = [(${historicalData})];
         var timeFormat = 'YYYY-MM-DD h:mm:ss';
         var fromCurrency = document.getElementById("inl").value;
         var toCurrency = document.getElementById("in2").value;
@@ -46,7 +46,7 @@
             type: 'line',
             data: {
                 datasets: [{
-                    data: abc,
+                    data: historicalData,
                     fill: true,
                     label: fromCurrency + " TO " + toCurrency,
                     borderColor: "#3e95cd"
@@ -56,7 +56,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: "Chart.js Time Scale"
+                    text: "Currency Exchange Rates"
                 },
                 scales: {
                     xAxes: [{
@@ -73,7 +73,7 @@
                     yAxes: [{
                         scaleLabel: {
                             display: true,
-                            labelString: 'value'
+                            labelString: fromCurrency + '/' + toCurrency +' Rates'
                         }
                     }]
                 }

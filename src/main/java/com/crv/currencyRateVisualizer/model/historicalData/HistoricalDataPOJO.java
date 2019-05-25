@@ -18,5 +18,6 @@ public class HistoricalDataPOJO {
     private String high;
     @SerializedName("4. close")
     private String close;
+    private Double compare;
     private String createDate;
 }
