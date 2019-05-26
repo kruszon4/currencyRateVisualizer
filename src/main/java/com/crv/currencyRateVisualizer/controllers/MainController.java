@@ -27,22 +27,20 @@ public class MainController {
 
         List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
         List<List> lists = historicalDataService.trendCalculator(hdd);
-        List m0 = lists.get(0);
-        List m1 = lists.get(1);
-        List m2 = lists.get(2);
-        List m3 = lists.get(3);
 
-        model.addAttribute("m0", historicalDataService.jsDataGenerator(m0));
-        model.addAttribute("m1", historicalDataService.jsDataGenerator(m1));
-        model.addAttribute("m2", historicalDataService.jsDataGenerator(m2));
-        model.addAttribute("m3", historicalDataService.jsDataGenerator(m3));
+        model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
+        model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
+        model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
+        model.addAttribute("color", historicalDataService.getTrendLineColor());
 
         model.addAttribute("defaultExchangeRate", currencyListService.getRealTimeDefaultValue());
         model.addAttribute("defaultHistoricalData", historicalDataService.jsDataGenerator(hdd));
         model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
 
+
         return "index";
     }
+
 
     @GetMapping("/rate/{from}/{to}")
     private String getExchangeRate(@PathVariable(value = "from") String fromCurrency,
@@ -55,6 +53,7 @@ public class MainController {
         return "realTimeRate";
     }
 
+
     @GetMapping("/cdata/{time}/{from}/{to}")
     private String getHhd(@PathVariable(value = "time") String time,
                           @PathVariable(value = "from") String from,
@@ -64,16 +63,65 @@ public class MainController {
             model.addAttribute("historicalData", historicalDataService.jsDataGenerator(historicalDataList));
             model.addAttribute("error", 0);
 
+            List<List> lists = historicalDataService.trendCalculator(historicalDataList);
+
+            model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
+            model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
+            model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
+            model.addAttribute("color", historicalDataService.getTrendLineColor());
+
 
         } catch (NullPointerException e) {
             System.out.println("Too many request");
             model.addAttribute("error", 1);
+
             List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
+            List<List> lists = historicalDataService.trendCalculator(hdd);
+
             model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
+            model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
+            model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
+            model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
+            model.addAttribute("color", historicalDataService.getTrendLineColor());
         }
 
         return "chart";
     }
+
+    @GetMapping("/tdata/{time}/{from}/{to}")
+    private String ggfgdd(@PathVariable(value = "time") String time,
+                          @PathVariable(value = "from") String from,
+                          @PathVariable(value = "to") String to, Model model) {
+        try {
+            List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
+            model.addAttribute("historicalData", historicalDataService.jsDataGenerator(historicalDataList));
+            model.addAttribute("error", 0);
+
+
+            model.addAttribute("m0", "[]");
+            model.addAttribute("m1", "[]");
+            model.addAttribute("m2", "[]");
+            model.addAttribute("color", "[]");
+
+
+        } catch (NullPointerException e) {
+            System.out.println("Too many request");
+            model.addAttribute("error", 1);
+
+            List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
+            List<List> lists = historicalDataService.trendCalculator(hdd);
+
+            model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
+            model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
+            model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
+            model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
+            model.addAttribute("color", historicalDataService.getTrendLineColor());
+        }
+
+        return "chart";
+    }
+
+
 
 
 }

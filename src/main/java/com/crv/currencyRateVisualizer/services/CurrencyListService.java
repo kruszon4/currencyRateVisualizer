@@ -47,12 +47,12 @@ public class CurrencyListService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 12 12 * * ?")
+    @Scheduled(cron = "0 12 03 * * ?")
     @EventListener(ApplicationReadyEvent.class)
     public void setDefaultCurrencyExchangeRateData() {
         this.realTimeDefaultValue = null;
         this.realTimeDefaultValue = getExchangeRate("USD", "EUR");
-        System.out.println("Data set");
+        System.out.println("Data loaded");
     }
 
 

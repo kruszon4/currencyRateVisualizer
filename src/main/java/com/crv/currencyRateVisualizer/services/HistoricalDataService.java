@@ -23,10 +23,11 @@ public class HistoricalDataService {
     private RestTemplate restTemplate = new RestTemplate();
     private Gson gson = new Gson();
     private List<HistoricalDataPOJO> historicalDefaultData = new ArrayList<>();
+    private List<String> trendLineColor = new ArrayList<>();
 
 
     @Transactional
-    @Scheduled(cron = "0 10 12 * * ?")
+    @Scheduled(cron = "0 10 03 * * ?")
     @EventListener(ApplicationReadyEvent.class)
     public void setDefaultCurrencyHistoricalData() {
         this.historicalDefaultData.clear();
@@ -90,18 +91,22 @@ public class HistoricalDataService {
         return object.toString();
     }
 
+
     public List<List> trendCalculator(List<HistoricalDataPOJO> source) {
+
+        this.trendLineColor.clear();
 
         List<List> trendList = new ArrayList<>();
         List<HistoricalDataPOJO> maxList = new ArrayList<>();
         List<HistoricalDataPOJO> minList = new ArrayList<>();
 
-        int listSize = source.size() / 5;
+        int trendLineNumber = 4;
+        int listSize = source.size() / trendLineNumber;
         int indexOf = 0;
 
         List<HistoricalDataPOJO> tmpList = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < trendLineNumber; i++) {
             for (int j = 0; j < listSize; j++) {
                 tmpList.add(source.get(indexOf + j));
             }
@@ -118,7 +123,7 @@ public class HistoricalDataService {
         }
 
 
-        for (int i = 0; i < maxList.size()-1; i++) {
+        for (int i = 0; i < maxList.size() - 1; i++) {
 
             double max = Double.parseDouble(maxList.get(i).getClose());
             double max2 = Double.parseDouble(maxList.get(i + 1).getClose());
@@ -130,6 +135,7 @@ public class HistoricalDataService {
                 List<HistoricalDataPOJO> tmp = new ArrayList<>();
                 tmp.add(maxList.get(i));
                 tmp.add(maxList.get(i + 1));
+                trendLineColor.add("red");
 
                 trendList.add(tmp);
             }
@@ -139,10 +145,20 @@ public class HistoricalDataService {
                 List<HistoricalDataPOJO> tmp = new ArrayList<>();
                 tmp.add(minList.get(i));
                 tmp.add(minList.get(i + 1));
+                trendLineColor.add("green");
 
                 trendList.add(tmp);
             }
         }
+
+        if (trendList.size() < trendLineNumber) {
+
+            for (int i = 0; i < trendLineNumber - trendList.size(); i++) {
+                trendList.add(new ArrayList());
+                trendLineColor.add("blue");
+            }
+        }
+
         return trendList;
     }
 

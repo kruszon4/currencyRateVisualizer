@@ -23,6 +23,10 @@
             -webkit-user-select: none;
             -ms-user-select: none;
         }
+
+
+
+
     </style>
 
 
@@ -38,7 +42,11 @@
         $(document).ready(function () {
             $("#btnCompare").click(function () {
 
-                document.getElementById("myChart").innerHTML = '&nbsp;';
+
+            var checkbox = document.getElementById('checkBox');
+     if (checkbox.checked == true)
+    {
+      document.getElementById("myChart").innerHTML = '&nbsp;';
                 document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
 
@@ -49,10 +57,30 @@
                 $("#realTimeExchangeDiv").load("loader.html");
                 $("#canvas").load('/cdata/' + time + '/' + fromCurrency + '/' + toCurrency);
                 $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
+        } else {
+
+        document.getElementById("myChart").innerHTML = '&nbsp;';
+                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
+
+
+                var fromCurrency = document.getElementById("inl").value;
+                var toCurrency = document.getElementById("in2").value;
+                var time = 'Monthly';
+
+                $("#realTimeExchangeDiv").load("loader.html");
+                $("#canvas").load('/tdata/' + time + '/' + fromCurrency + '/' + toCurrency);
+                $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
+
+                }
+
 
 
             });
         });
+
+
+
+
     </script>
 
     <script>
@@ -77,13 +105,18 @@
                 }
             });
         });
+
     </script>
 
     <script>
         $(document).ready(function () {
-            $(".btn-primary").click(function () {
 
-                var timeButton = $(this).attr("value");
+                 $(".btn-primary").click(function () {
+
+                 var checkbox = document.getElementById('checkBox');
+  if (checkbox.checked == true)
+  {
+          var timeButton = $(this).attr("value");
                 var fromCurrency = document.getElementById("inl").value;
                 var toCurrency = document.getElementById("in2").value;
 
@@ -91,9 +124,26 @@
                 document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
                 $("#canvas").load('/cdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
+  } else {
+
+      var timeButton = $(this).attr("value");
+                var fromCurrency = document.getElementById("inl").value;
+                var toCurrency = document.getElementById("in2").value;
+
+                document.getElementById("myChart").innerHTML = '&nbsp;';
+                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
+
+                $("#canvas").load('/tdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
+
+}
+
 
             });
         });
+
+
+
+
     </script>
 
 
@@ -135,7 +185,20 @@
                         </option>
                     </select>
 
-                    <a id="btnCompare" class="btn btn-info btn-block" href="#" role="button">Compare</a>
+                    <div class="col">
+                        <a id="btnCompare" class="btn btn-info btn-block" href="#" role="button">Compare</a>
+                    </div>
+
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input id="checkBox" type="checkbox" aria-label="Checkbox for following text input"
+                                       checked/>
+                                <b> &nbsp TrendLine</b>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
@@ -219,10 +282,11 @@
     var m0 = [(${m0})];
     var m1 = [(${m1})];
     var m2 = [(${m2})];
-    var m3 = [(${m3})];
+    var color = [[${color}]]
+
 
     var timeFormat = 'YYYY-MM-DD h:mm:ss';
-
+    var checkBox = document.getElementById("checkBox").value;
 
     new Chart(document.getElementById("canvas"), {
         type: 'line',
@@ -230,32 +294,23 @@
             datasets: [{
                 data: defaultData,
                 fill: true,
-                label: "USD to EUR",
                 borderColor: "#3e95cd"
             },
-                {
-                    data: m0,
-                    fill: false,
-
-                    borderColor: "red"
-                },
-                {
-                    data: m1,
-                    fill: false,
-
-                    borderColor: "green"
-                },
-                {
-                    data: m2,
-                    fill: false,
-                    borderColor: "green"
-                },
-                {
-                    data: m3,
-                    fill: false,
-                    borderColor: "green"
-                }
-            ]
+            {
+                data: m0,
+                fill: false,
+                borderColor: color[0]
+            },
+            {
+                data: m1,
+                fill: false,
+                borderColor: color[1]
+            },
+            {
+                data: m2,
+                fill: false,
+                borderColor: color[2]
+            }]
         },
         options: {
             responsive: true,
@@ -271,7 +326,6 @@
                     type: "time",
                     time: {
                         parser: timeFormat,
-                        tooltipFormat: 'll'
                     },
                     scaleLabel: {
                         display: true,
@@ -289,6 +343,10 @@
     });
 
     /*]]>*/
+
+
+
+
 </script>
 
 

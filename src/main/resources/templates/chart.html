@@ -12,6 +12,13 @@
             -webkit-user-select: none;
             -ms-user-select: none;
         }
+
+
+
+
+
+
+
     </style>
 
     <script
@@ -27,59 +34,86 @@
 <div id="myChart" style="width:75%;">
     <canvas id="canvas"></canvas>
 </div>
-<script>
+<script th:inline="javascript">
 
-    var error = [(${error})];
+  var error = [[${error}]];
+
     if (error > 0) {
 
         window.alert("Too Many Requests - wait 1 min");
         window.location.reload(true);
 
     } else {
+
         var historicalData = [(${historicalData})];
         var timeFormat = 'YYYY-MM-DD h:mm:ss';
-        var fromCurrency = document.getElementById("inl").value;
-        var toCurrency = document.getElementById("in2").value;
 
 
-        new Chart(document.getElementById("canvas"), {
-            type: 'line',
-            data: {
-                datasets: [{
-                    data: historicalData,
-                    fill: true,
-                    label: fromCurrency + " TO " + toCurrency,
-                    borderColor: "#3e95cd"
-                }]
+        var m0 = [(${m0})];
+        var m1 = [(${m1})];
+        var m2 = [(${m2})];
+        var color = [[${color}]];
+
+
+        var timeFormat = 'YYYY-MM-DD h:mm:ss';
+
+
+         new Chart(document.getElementById("canvas"), {
+        type: 'line',
+        data: {
+            datasets: [{
+                data: historicalData,
+                fill: true,
+                borderColor: "#3e95cd"
             },
-            options: {
-                responsive: true,
-                title: {
-                    display: true,
-                    text: "Currency Exchange Rates"
-                },
-                scales: {
-                    xAxes: [{
-                        type: "time",
-                        time: {
-                            parser: timeFormat,
-                            tooltipFormat: 'll'
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Date'
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: fromCurrency + '/' + toCurrency +' Rates'
-                        }
-                    }]
-                }
+            {
+                data: m0,
+                fill: false,
+                borderColor: color[0]
+            },
+            {
+                data: m1,
+                fill: false,
+                borderColor: color[1]
+            },
+            {
+                data: m2,
+                fill: false,
+                borderColor: color[2]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: "Currency Exchange Rates"
+            },
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    type: "time",
+                    time: {
+                        parser: timeFormat,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Date'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'USD/EUR Rates'
+                    }
+                }]
             }
-        })
+         }
+        });
     }
+
+
 
 
 </script>
