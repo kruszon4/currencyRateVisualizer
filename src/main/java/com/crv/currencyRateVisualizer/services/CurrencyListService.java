@@ -47,7 +47,7 @@ public class CurrencyListService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 20 3 * * ?")
+    @Scheduled(cron = "0 12 12 * * ?")
     @EventListener(ApplicationReadyEvent.class)
     public void setDefaultCurrencyExchangeRateData() {
         this.realTimeDefaultValue = null;

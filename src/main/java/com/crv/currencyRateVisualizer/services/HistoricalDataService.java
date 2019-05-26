@@ -26,7 +26,7 @@ public class HistoricalDataService {
 
 
     @Transactional
-    @Scheduled(cron = "0 20 3 * * ?")
+    @Scheduled(cron = "0 10 12 * * ?")
     @EventListener(ApplicationReadyEvent.class)
     public void setDefaultCurrencyHistoricalData() {
         this.historicalDefaultData.clear();
