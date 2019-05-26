@@ -55,7 +55,6 @@ public class CurrencyListService {
         System.out.println("Data loaded");
     }
 
-
     public RealTimeValue getExchangeRate(String fromCurrency, String toCurrency) {
 
         String stringBuilder = "https://www.alphavantage.co/query?function=CURRENCY_EXCHANGE_RATE&from_currency=" +

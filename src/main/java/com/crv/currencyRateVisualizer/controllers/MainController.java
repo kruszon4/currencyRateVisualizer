@@ -37,15 +37,12 @@ public class MainController {
         model.addAttribute("defaultHistoricalData", historicalDataService.jsDataGenerator(hdd));
         model.addAttribute("currencyList", currencyListService.getCurrencyNameList());
 
-
         return "index";
     }
-
 
     @GetMapping("/rate/{from}/{to}")
     private String getExchangeRate(@PathVariable(value = "from") String fromCurrency,
                                    @PathVariable(value = "to") String toCurrency, Model model) {
-
 
         RealTimeValue exchangeRate = currencyListService.getExchangeRate(fromCurrency, toCurrency);
         model.addAttribute("exchangeRate", exchangeRate);
@@ -56,8 +53,9 @@ public class MainController {
 
     @GetMapping("/cdata/{time}/{from}/{to}")
     private String getChartWithTrend(@PathVariable(value = "time") String time,
-                          @PathVariable(value = "from") String from,
-                          @PathVariable(value = "to") String to, Model model) {
+                                     @PathVariable(value = "from") String from,
+                                     @PathVariable(value = "to") String to, Model model) {
+
         try {
             List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
             model.addAttribute("historicalData", historicalDataService.jsDataGenerator(historicalDataList));
@@ -72,17 +70,7 @@ public class MainController {
 
 
         } catch (NullPointerException e) {
-            System.out.println("Too many request");
-            model.addAttribute("error", 1);
-
-            List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
-            List<List> lists = historicalDataService.trendCalculator(hdd);
-
-            model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
-            model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
-            model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
-            model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
-            model.addAttribute("color", historicalDataService.getTrendLineColor());
+            exceptionData(model);
         }
 
         return "chart";
@@ -90,8 +78,8 @@ public class MainController {
 
     @GetMapping("/tdata/{time}/{from}/{to}")
     private String getChartWithoutTrend(@PathVariable(value = "time") String time,
-                          @PathVariable(value = "from") String from,
-                          @PathVariable(value = "to") String to, Model model) {
+                                        @PathVariable(value = "from") String from,
+                                        @PathVariable(value = "to") String to, Model model) {
         try {
             List<HistoricalDataPOJO> historicalDataList = historicalDataService.getHistoricalDataList(time, from, to);
             model.addAttribute("historicalData", historicalDataService.jsDataGenerator(historicalDataList));
@@ -105,23 +93,24 @@ public class MainController {
 
 
         } catch (NullPointerException e) {
-            System.out.println("Too many request");
-            model.addAttribute("error", 1);
-
-            List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
-            List<List> lists = historicalDataService.trendCalculator(hdd);
-
-            model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
-            model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
-            model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
-            model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
-            model.addAttribute("color", historicalDataService.getTrendLineColor());
+            exceptionData(model);
         }
 
         return "chart";
     }
 
+    private void exceptionData(Model model) {
+        System.out.println("Too many request");
+        model.addAttribute("error", 1);
 
+        List<HistoricalDataPOJO> hdd = historicalDataService.getHistoricalDefaultData();
+        List<List> lists = historicalDataService.trendCalculator(hdd);
 
+        model.addAttribute("historicalData", historicalDataService.jsDataGenerator(hdd));
+        model.addAttribute("m0", historicalDataService.jsDataGenerator(lists.get(0)));
+        model.addAttribute("m1", historicalDataService.jsDataGenerator(lists.get(1)));
+        model.addAttribute("m2", historicalDataService.jsDataGenerator(lists.get(2)));
+        model.addAttribute("color", historicalDataService.getTrendLineColor());
+    }
 
 }

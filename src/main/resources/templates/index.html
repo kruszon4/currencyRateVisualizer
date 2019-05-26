@@ -24,11 +24,7 @@
             -ms-user-select: none;
         }
 
-
-
-
     </style>
-
 
     <script
             src="https://code.jquery.com/jquery-3.3.1.js"
@@ -37,49 +33,39 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
-
     <script>
         $(document).ready(function () {
             $("#btnCompare").click(function () {
 
 
-            var checkbox = document.getElementById('checkBox');
-     if (checkbox.checked == true)
-    {
-      document.getElementById("myChart").innerHTML = '&nbsp;';
-                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
+                var checkbox = document.getElementById('checkBox');
+                if (checkbox.checked == true) {
+                    document.getElementById("myChart").innerHTML = '&nbsp;';
+                    document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
+
+                    var fromCurrency = document.getElementById("inl").value;
+                    var toCurrency = document.getElementById("in2").value;
+                    var time = 'Monthly';
+
+                    $("#realTimeExchangeDiv").load("loader.html");
+                    $("#canvas").load('/cdata/' + time + '/' + fromCurrency + '/' + toCurrency);
+                    $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
+                } else {
+                    document.getElementById("myChart").innerHTML = '&nbsp;';
+                    document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
 
-                var fromCurrency = document.getElementById("inl").value;
-                var toCurrency = document.getElementById("in2").value;
-                var time = 'Monthly';
+                    var fromCurrency = document.getElementById("inl").value;
+                    var toCurrency = document.getElementById("in2").value;
+                    var time = 'Monthly';
 
-                $("#realTimeExchangeDiv").load("loader.html");
-                $("#canvas").load('/cdata/' + time + '/' + fromCurrency + '/' + toCurrency);
-                $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
-        } else {
-
-        document.getElementById("myChart").innerHTML = '&nbsp;';
-                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
-
-
-                var fromCurrency = document.getElementById("inl").value;
-                var toCurrency = document.getElementById("in2").value;
-                var time = 'Monthly';
-
-                $("#realTimeExchangeDiv").load("loader.html");
-                $("#canvas").load('/tdata/' + time + '/' + fromCurrency + '/' + toCurrency);
-                $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
-
+                    $("#realTimeExchangeDiv").load("loader.html");
+                    $("#canvas").load('/tdata/' + time + '/' + fromCurrency + '/' + toCurrency);
+                    $("#realTimeExchangeDiv").load('/rate/' + fromCurrency + '/' + toCurrency);
                 }
-
-
 
             });
         });
-
-
-
 
     </script>
 
@@ -111,42 +97,33 @@
     <script>
         $(document).ready(function () {
 
-                 $(".btn-primary").click(function () {
+            $(".btn-primary").click(function () {
 
-                 var checkbox = document.getElementById('checkBox');
-  if (checkbox.checked == true)
-  {
-          var timeButton = $(this).attr("value");
-                var fromCurrency = document.getElementById("inl").value;
-                var toCurrency = document.getElementById("in2").value;
+                var checkbox = document.getElementById('checkBox');
+                if (checkbox.checked == true) {
+                    var timeButton = $(this).attr("value");
+                    var fromCurrency = document.getElementById("inl").value;
+                    var toCurrency = document.getElementById("in2").value;
 
-                document.getElementById("myChart").innerHTML = '&nbsp;';
-                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
+                    document.getElementById("myChart").innerHTML = '&nbsp;';
+                    document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
-                $("#canvas").load('/cdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
-  } else {
+                    $("#canvas").load('/cdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
+                } else {
 
-      var timeButton = $(this).attr("value");
-                var fromCurrency = document.getElementById("inl").value;
-                var toCurrency = document.getElementById("in2").value;
+                    var timeButton = $(this).attr("value");
+                    var fromCurrency = document.getElementById("inl").value;
+                    var toCurrency = document.getElementById("in2").value;
 
-                document.getElementById("myChart").innerHTML = '&nbsp;';
-                document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
+                    document.getElementById("myChart").innerHTML = '&nbsp;';
+                    document.getElementById("myChart").innerHTML = '<canvas id="canvas"></canvas>';
 
-                $("#canvas").load('/tdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
-
-}
-
-
+                    $("#canvas").load('/tdata/' + timeButton + '/' + fromCurrency + '/' + toCurrency);
+                }
             });
         });
 
-
-
-
     </script>
-
-
 </head>
 
 <body>
@@ -168,27 +145,22 @@
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">Select exchange currencies</h4>
                 </div>
-
                 <div class="card-body">
-
                     <select class="custom-select my-1 mr-sm-2" id="inl">
                         <option selected>USD</option>
                         <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
                                 th:id="${currencyCode.code}">CurrencyCode
                         </option>
                     </select>
-
                     <select class="custom-select my-1 mr-sm-2" id="in2">
                         <option selected>EUR</option>
                         <option th:each="currencyCode : ${currencyList}" th:text="${currencyCode.code}"
                                 th:id="${currencyCode.code}">CurrencyCode
                         </option>
                     </select>
-
                     <div class="col">
                         <a id="btnCompare" class="btn btn-info btn-block" href="#" role="button">Compare</a>
                     </div>
-
                     <div class="col">
                         <div class="input-group mb-3">
                             <div class="input-group-text">
@@ -198,8 +170,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -227,17 +197,13 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
     <div class="row">
         <div class="col-md-10">
-
             <div id="myChart">
-
                 <canvas id="canvas"></canvas>
-
             </div>
         </div>
 
@@ -249,15 +215,14 @@
             <a id="btn15min" class="btn btn-primary btn-sm" href="#" role="button" th:value="15min">15&nbspmin</a>
             <a id="btn5min" class="btn btn-primary btn-sm" href="#" role="button" th:value="5min">5&nbspmin</a>
         </div>
-
-
     </div>
 
 
     <footer style="text-align: center">
-
         <p><span style="text-decoration:none;color:grey;">Developed by S.Kruszynski</span>
         </p>
+        <p><span style="text-decoration:none;color:grey;">Data provided by : <a href="https://www.alphavantage.co">https://www.alphavantage.co/</a> Restrictions: max 5 requests per minute / 500 per day </span></p>
+
         <p><span style="text-decoration:none;color:grey;">Icons made by <a
                 href="https://www.freepik.com/?__hstc=57440181.d4c43aac8839297eb82fced2bc2b46a3.1558120059052.1558120059052.1558120059052.1&__hssc=57440181.4.1558120059054&__hsfp=3373292308"
                 title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
@@ -266,11 +231,7 @@
                 target="_blank">CC
             3.0 BY</a></span>
         </p>
-
-
     </footer>
-
-
 </div>
 
 
@@ -286,7 +247,6 @@
 
 
     var timeFormat = 'YYYY-MM-DD h:mm:ss';
-    var checkBox = document.getElementById("checkBox").value;
 
     new Chart(document.getElementById("canvas"), {
         type: 'line',
@@ -296,21 +256,21 @@
                 fill: true,
                 borderColor: "#3e95cd"
             },
-            {
-                data: m0,
-                fill: false,
-                borderColor: color[0]
-            },
-            {
-                data: m1,
-                fill: false,
-                borderColor: color[1]
-            },
-            {
-                data: m2,
-                fill: false,
-                borderColor: color[2]
-            }]
+                {
+                    data: m0,
+                    fill: false,
+                    borderColor: color[0]
+                },
+                {
+                    data: m1,
+                    fill: false,
+                    borderColor: color[1]
+                },
+                {
+                    data: m2,
+                    fill: false,
+                    borderColor: color[2]
+                }]
         },
         options: {
             responsive: true,
@@ -341,12 +301,7 @@
             }
         }
     });
-
     /*]]>*/
-
-
-
-
 </script>
 
 

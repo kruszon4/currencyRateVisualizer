@@ -158,7 +158,6 @@ public class HistoricalDataService {
                 trendLineColor.add("blue");
             }
         }
-
         return trendList;
     }
 
