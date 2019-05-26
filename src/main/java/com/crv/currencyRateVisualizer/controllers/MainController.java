@@ -55,7 +55,7 @@ public class MainController {
 
 
     @GetMapping("/cdata/{time}/{from}/{to}")
-    private String getHhd(@PathVariable(value = "time") String time,
+    private String getChartWithTrend(@PathVariable(value = "time") String time,
                           @PathVariable(value = "from") String from,
                           @PathVariable(value = "to") String to, Model model) {
         try {
@@ -89,7 +89,7 @@ public class MainController {
     }
 
     @GetMapping("/tdata/{time}/{from}/{to}")
-    private String ggfgdd(@PathVariable(value = "time") String time,
+    private String getChartWithoutTrend(@PathVariable(value = "time") String time,
                           @PathVariable(value = "from") String from,
                           @PathVariable(value = "to") String to, Model model) {
         try {
